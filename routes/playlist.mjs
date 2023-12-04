@@ -17,12 +17,18 @@ router.get("/playlist", async (req, res) => {
 });
 
 router.get("/playlist/download", async (req, res) => {
+
+  let type = req.query.type
+  let lang = req.query.lang
+  if (type && lang) {
+    res.status(500).send({ message: "Either one of type / lang is allowed" });
+  }
   res.contentType("application/vnd.apple.mpegurl");
   res.setHeader(
     "Content-Disposition",
     "attachment; filename=" + "playlist.m3u8"
   );
-  const playlistData = await playlist(req.protocol + '://' + req.get('host') );
+  const playlistData = await playlist(req.protocol + '://' + req.get('host'), type, lang );
   res.status(200).send(playlistData);
 });
 

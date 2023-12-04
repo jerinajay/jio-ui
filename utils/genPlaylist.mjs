@@ -1,6 +1,6 @@
 import playlist from "./getJsonPlaylist.mjs";
 
-export default async function genPlaylist(url) {
+export default async function genPlaylist(url, type, lang) {
   try {
     let m3u8PlaylistFile =
       '#EXTM3U  x-tvg-url="https://tobalan.github.io/epg.xml.gz"\x0a';
@@ -41,9 +41,27 @@ export default async function genPlaylist(url) {
 
     // fs
     let response = await playlist();
-
+    let channels = response["result"]
+    if (lang) {
+      let langId
+      for (const langKey in langMap) {
+        if(langMap[langKey].toLowerCase() === lang.toLowerCase()){
+          langId = langKey
+        }
+      }
+      channels = channels.filter(e=> e.channelLanguageId === Number(langId))
+    }
+    if (type) {
+      let typeId
+      for (const genreKey in genreMap) {
+        if(genreMap[genreKey].toLowerCase() === lang.toLowerCase()){
+          typeId = genreKey
+        }
+      }
+      channels = channels.filter(e=> e.channelCategoryId === Number(typeId))
+    }
     const ServerUrl = `${url}`;
-    for (let resData of response["result"]) {
+    for (let resData of channels) {
       const channel_name = resData["channel_name"];
       const channel_number = resData["channel_id"];
       const channelLogoUrl =
@@ -64,6 +82,7 @@ export default async function genPlaylist(url) {
         "/master.m3u8" +
         "\x0a";
     }
+if(!lang && !type){
     m3u8PlaylistFile += `#EXTINF:-1 tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Sony_HD.png" group-title="Sony Liv",SONY HD
 https://dai.google.com/linear/hls/event/dBdwOiGaQvy0TA1zOsjV6w/master.m3u8
 #EXTINF:-1 tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Sony_SAB_HD.png" group-title="Sony Liv",SONY SAB HD
@@ -108,6 +127,8 @@ https://dai.google.com/linear/hls/event/GPY7RqOrSkmKJ8z1GbVNhg/master.m3u8
 https://dai.google.com/linear/hls/event/I2phC6tgTDuJngxw9gJgPw/master.m3u8
 #EXTINF:-1 tvg-logo="http://jiotv.catchup.cdn.jio.com/dare_images/images/Sony_aath.png" group-title="Sony Liv",SONY AATH 
 https://dai.google.com/linear/hls/event/j-YEIDwORxubtP_967VcZg/master.m3u8`;
+
+}
     return m3u8PlaylistFile;
   } catch (error) {
     console.error(error);
