@@ -66,51 +66,51 @@ router.get("/getts", async (req, res) => {
   }
 });
 
-// router.get("/getkey", async (req, res) => {
-//   const { id, key } = req.query;
-//   const cookie = await getCookie(id);
-//   if (!cookie.success) {
-//     await genM3u8(id);
-//     return res.redirect(req.originalUrl);
-//   }
-//   let userDataJiotv = JSON["parse"](
-//     fs["readFileSync"]("tokenData.jiotv", { encoding: "utf8", flag: "r" })
-//   );
-//   let url = `https://tv.media.jio.com/${key}`;
+router.get("/getkey", async (req, res) => {
+  const { id, key } = req.query;
+  const cookie = await getCookie(id);
+  if (!cookie.success) {
+    await genM3u8(id);
+    return res.redirect(req.originalUrl);
+  }
+  let userDataJiotv = JSON["parse"](
+    fs["readFileSync"]("tokenData.jiotv", { encoding: "utf8", flag: "r" })
+  );
+  let url = `https://tv.media.jio.com/${key}`;
 
-//   let options = {
-//     method: "GET",
-//     headers: {
-//       Accept: "*/*",
-//       "User-Agent": "plaYtv/7.0.8 (Linux;Android 9) ExoPlayerLib/2.11.7",
-//       appkey: "NzNiMDhlYzQyNjJm",
-//       devicetype: "phone",
-//       os: "android",
-//       deviceId: "3c6d6b5702fa09bd",
-//       isott: "false",
-//       channelid: id,
-//       Cookie: cookie.data,
-//       osVersion: "7.1.2",
-//       srno: "230128144001",
-//       ssotoken: userDataJiotv["ssoToken"],
-//       uniqueId: userDataJiotv["sessionAttributes"]["user"]["unique"],
-//       userId: userDataJiotv["sessionAttributes"]["user"]["uid"],
-//       crmid: userDataJiotv["sessionAttributes"]["user"]["subscriberId"],
-//       usergroup: "tvYR7NSNn7rymo3F",
-//       versionCode: "226",
-//       Connection: "Keep-Alive",
-//       "Accept-Encoding": "gzip",
-//     },
-//   };
-//   try {
-//     let r = await fetch(url, options);
-//     return res
-//       .status(r.status)
-//       .send(r.status == 200 ? await r.buffer() : await r.text());
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(500).send(error);
-//   }
-// });
+  let options = {
+    method: "GET",
+    headers: {
+      Accept: "*/*",
+      "User-Agent": "plaYtv/7.0.8 (Linux;Android 9) ExoPlayerLib/2.11.7",
+      appkey: "NzNiMDhlYzQyNjJm",
+      devicetype: "phone",
+      os: "android",
+      deviceId: "3c6d6b5702fa09bd",
+      isott: "false",
+      channelid: id,
+      Cookie: cookie.data,
+      osVersion: "7.1.2",
+      srno: "230128144001",
+      ssotoken: userDataJiotv["ssoToken"],
+      uniqueId: userDataJiotv["sessionAttributes"]["user"]["unique"],
+      userId: userDataJiotv["sessionAttributes"]["user"]["uid"],
+      crmid: userDataJiotv["sessionAttributes"]["user"]["subscriberId"],
+      usergroup: "tvYR7NSNn7rymo3F",
+      versionCode: "226",
+      Connection: "Keep-Alive",
+      "Accept-Encoding": "gzip",
+    },
+  };
+  try {
+    let r = await fetch(url, options);
+    return res
+      .status(r.status)
+      .send(r.status == 200 ? await r.buffer() : await r.text());
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send(error);
+  }
+});
 
 export default router;
