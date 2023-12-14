@@ -32,6 +32,18 @@ router.get("/playlist/download", async (req, res) => {
   res.status(200).send(playlistData);
 });
 
+router.get("/playlist/m3u8", async (req, res) => {
+
+  let type = req.query.type
+  let lang = req.query.lang
+  if (type && lang) {
+    res.status(500).send({ message: "Either one of type / lang is allowed" });
+  }
+  res.contentType("text/html; charset=UTF-8");
+  const playlistData = await playlist(req.protocol + '://' + req.get('host'), type, lang );
+  res.status(200).send(playlistData);
+});
+
 router.get("/playlist/json", async (req, res) => {
   res.set("Cache-control", "public, max-age=" + 60 * 60 * 2);
   res.status(200).send(await jsonPlaylist());
