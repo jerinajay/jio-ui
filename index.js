@@ -3,7 +3,17 @@ import cors from "cors";
 import os from "node:os";
 import 'dotenv/config';
 import chalk from "chalk";
+import mongoose from 'mongoose';
+import Agenda from "agenda";
 const app = express();
+const { Schema } = mongoose;
+const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://127.0.0.1/ipTV';
+mongoose.connect(MONGO_DB_URL)
+  .then(() => console.log('Connected!'));
+
+const IpLog = mongoose.model('ipLog', new Schema({ ip: String, created_at: Date }));
+const agenda = new Agenda({ db: { address: MONGO_DB_URL } });
+
 app.use(express.urlencoded({ extended: true }));
 import fs from "fs";
 app.use(express.json());
@@ -29,20 +39,20 @@ if (!fs.existsSync("channel-catchup.db")) {
   fs["writeFileSync"]("./channel-catchup.db", '{"channel": {}}');
 }
 
-app.get("/login.html", (req, res) => {
+// app.get("/login.html", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "login.html"));
+// });
+
+app.get("/7200300828", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
-app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-app.get("/admin.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
+// app.get("/admin", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "login.html"));
+// });
+// app.get("/admin.html", (req, res) => {
+//   res.sendFile(path.join(__dirname, "public", "login.html"));
+// });
 
 app.use(cors());
 
@@ -66,6 +76,22 @@ import { handler } from "./build/handler.js";
 
 app.use(handler);
 
+agenda.define("update_ip", async () => {
+  fetch("https://ipecho.io/json")
+    .then((response) => response.json())
+    .then(async (data) => {
+      let save_ip = await new IpLog({ ip: data.ip, created_at: Date.now() }).save();
+    });
+});
+
+(async function () {
+  // IIFE to give access to async/await
+  await agenda.start();
+
+  await agenda.every("60 minutes", "update_ip");
+})();
+
+
 app.listen(PORT, "0.0.0.0", async () => {
   let r
   try {
@@ -73,7 +99,7 @@ app.listen(PORT, "0.0.0.0", async () => {
     r = await r.json();
     r = r['tag_name']
   } catch (error) {
-    
+
   }
   console.log(
     "==================================================================="
@@ -124,4 +150,6 @@ app.listen(PORT, "0.0.0.0", async () => {
   // console.log(chalk.red("need to login every 24 hours even if you are already logged in"));
   console.log("If facing any errors, please login from portal again");
   console.log("you can use server m3u8 links in other websites and apps");
+
+
 });

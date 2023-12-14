@@ -1,0 +1,1 @@
+import{S as r,i as p,s as i,I as c}from"../chunks/index.ea98a15b.js";import{p as u}from"../chunks/stores.3d5a061d.js";function l(s,t,a){let e;c(s,u,n=>a(0,e=n));const{id:o}=e.params;return window.location.href=`/catchup/${o}`,[]}class d extends r{constructor(t){super(),p(this,t,l,null,i,{})}}export{d as default};

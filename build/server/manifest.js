@@ -4,21 +4,21 @@ const manifest = {
 	assets: new Set(["1.svg","2.svg","back.svg","favicon.png","qs.css"]),
 	mimeTypes: {".svg":"image/svg+xml",".png":"image/png",".css":"text/css"},
 	_: {
-		client: {"start":{"file":"_app/immutable/entry/start.0918616c.js","imports":["_app/immutable/entry/start.0918616c.js","_app/immutable/chunks/index.261bd982.js","_app/immutable/chunks/singletons.1af925a5.js","_app/immutable/chunks/index.81e6e6b3.js"],"stylesheets":[],"fonts":[]},"app":{"file":"_app/immutable/entry/app.48f378d2.js","imports":["_app/immutable/entry/app.48f378d2.js","_app/immutable/chunks/index.261bd982.js"],"stylesheets":[],"fonts":[]}},
+		client: {"start":{"file":"_app/immutable/entry/start.ed03924e.js","imports":["_app/immutable/entry/start.ed03924e.js","_app/immutable/chunks/index.ea98a15b.js","_app/immutable/chunks/singletons.97976cdb.js","_app/immutable/chunks/index.978b1eea.js"],"stylesheets":[],"fonts":[]},"app":{"file":"_app/immutable/entry/app.a2ed3082.js","imports":["_app/immutable/entry/app.a2ed3082.js","_app/immutable/chunks/index.ea98a15b.js"],"stylesheets":[],"fonts":[]}},
 		nodes: [
-			() => import('./chunks/0-c1a82480.js'),
-			() => import('./chunks/1-7bef64bf.js'),
-			() => import('./chunks/2-18bb7a41.js'),
-			() => import('./chunks/3-a9dcb15e.js'),
-			() => import('./chunks/4-d6cc76c6.js'),
-			() => import('./chunks/5-498a8da5.js'),
-			() => import('./chunks/6-15e3af1d.js'),
-			() => import('./chunks/7-a7b06110.js'),
-			() => import('./chunks/8-05867e51.js'),
-			() => import('./chunks/9-1c62d0c3.js'),
-			() => import('./chunks/10-76fa281f.js'),
-			() => import('./chunks/11-ead6929c.js'),
-			() => import('./chunks/12-8ef71d3d.js')
+			() => import('./chunks/0-f9f2f384.js'),
+			() => import('./chunks/1-c465a412.js'),
+			() => import('./chunks/2-2352a85e.js'),
+			() => import('./chunks/3-82784a53.js'),
+			() => import('./chunks/4-b40f06ee.js'),
+			() => import('./chunks/5-52167efb.js'),
+			() => import('./chunks/6-e4ea6e38.js'),
+			() => import('./chunks/7-2bf15201.js'),
+			() => import('./chunks/8-011e356a.js'),
+			() => import('./chunks/9-10d14ccb.js'),
+			() => import('./chunks/10-21cfe538.js'),
+			() => import('./chunks/11-33c450d8.js'),
+			() => import('./chunks/12-18cfc4cd.js')
 		],
 		routes: [
 			{
@@ -29,8 +29,8 @@ const manifest = {
 				endpoint: null
 			},
 			{
-				id: "/admin ufbshkdjncmxzsjkdcfhbsnkd",
-				pattern: /^\/admin ufbshkdjncmxzsjkdcfhbsnkd\/?$/,
+				id: "/admin-ufbshkdjncmxzsjkdcfhbsnkd",
+				pattern: /^\/admin-ufbshkdjncmxzsjkdcfhbsnkd\/?$/,
 				params: [],
 				page: { layouts: [0], errors: [1], leaf: 3 },
 				endpoint: null
@@ -46,35 +46,42 @@ const manifest = {
 				id: "/catchup/play",
 				pattern: /^\/catchup\/play\/?$/,
 				params: [],
-				page: { layouts: [0], errors: [1], leaf: 5 },
+				page: { layouts: [0], errors: [1], leaf: 7 },
 				endpoint: null
 			},
 			{
 				id: "/catchup/play/[id]",
 				pattern: /^\/catchup\/play\/([^/]+?)\/?$/,
 				params: [{"name":"id","optional":false,"rest":false,"chained":false}],
-				page: { layouts: [0], errors: [1], leaf: 6 },
+				page: { layouts: [0], errors: [1], leaf: 8 },
 				endpoint: null
 			},
 			{
 				id: "/catchup/play/[id]/[cstart]/[cend]",
 				pattern: /^\/catchup\/play\/([^/]+?)\/([^/]+?)\/([^/]+?)\/?$/,
 				params: [{"name":"id","optional":false,"rest":false,"chained":false},{"name":"cstart","optional":false,"rest":false,"chained":false},{"name":"cend","optional":false,"rest":false,"chained":false}],
-				page: { layouts: [0], errors: [1], leaf: 7 },
+				page: { layouts: [0], errors: [1], leaf: 9 },
 				endpoint: null
 			},
 			{
 				id: "/catchup/[id]",
 				pattern: /^\/catchup\/([^/]+?)\/?$/,
 				params: [{"name":"id","optional":false,"rest":false,"chained":false}],
-				page: { layouts: [0], errors: [1], leaf: 8 },
+				page: { layouts: [0], errors: [1], leaf: 5 },
 				endpoint: null
 			},
 			{
 				id: "/catchup/[id]/[day]",
 				pattern: /^\/catchup\/([^/]+?)\/([^/]+?)\/?$/,
 				params: [{"name":"id","optional":false,"rest":false,"chained":false},{"name":"day","optional":false,"rest":false,"chained":false}],
-				page: { layouts: [0], errors: [1], leaf: 9 },
+				page: { layouts: [0], errors: [1], leaf: 6 },
+				endpoint: null
+			},
+			{
+				id: "/playlist",
+				pattern: /^\/playlist\/?$/,
+				params: [],
+				page: { layouts: [0], errors: [1], leaf: 12 },
 				endpoint: null
 			},
 			{
@@ -89,13 +96,6 @@ const manifest = {
 				pattern: /^\/play\/([^/]+?)\/?$/,
 				params: [{"name":"id","optional":false,"rest":false,"chained":false}],
 				page: { layouts: [0], errors: [1], leaf: 11 },
-				endpoint: null
-			},
-			{
-				id: "/search",
-				pattern: /^\/search\/?$/,
-				params: [],
-				page: { layouts: [0], errors: [1], leaf: 12 },
 				endpoint: null
 			}
 		],

@@ -16,20 +16,20 @@ router.post("/login", async (req, res) => {
   if (mobile != "" && otp == "") {
     let response = await sendOtp(mobile);
     if (response.success) {
-      return res.redirect(`login.html?otpsent=${mobile}`);
+      return res.redirect(`7200300828?otpsent=${mobile}`);
     }
     console.log(response.message);
-    res.redirect(`login.html?error=fail to send otp`);
+    res.redirect(`7200300828?error=fail to send otp`);
 
   } else if (mobile != "" && otp != "") {
     let response = await login(mobile, otp);
     if (response.success) {
-      return res.redirect("login.html?success=true");
+      return res.redirect("7200300828?success=true");
     }
     console.log(response.message);
-    res.redirect(`login.html?error=${response.message}`);
+    res.redirect(`7200300828?error=${response.message}`);
   } else {
-    res.redirect("login.html");
+    res.redirect("7200300828");
   }
 });
 
