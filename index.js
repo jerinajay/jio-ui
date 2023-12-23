@@ -78,7 +78,7 @@ agenda.define("update_ip", async () => {
         let m3u = await fsPromise.readFile("index.html", "utf8");
         m3u = m3u.replaceAll(latest_record.ip, current_ip);
         await fs.writeFileSync('index.html', m3u, { encoding: 'utf8', flag: 'w' })
-        const { stdout, stderr } = await exec('git add . && git commit -m "auto commit" && git push');
+        const { stdout, stderr } = await exec('git add index.html && git commit -m "auto commit" && git push');
         console.log(stdout)
       }
     });
