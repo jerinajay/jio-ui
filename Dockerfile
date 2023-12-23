@@ -4,6 +4,8 @@ COPY . /src
 
 WORKDIR /src
 
+RUN apk update && apk upgrade && apk add --no-cache bash git openssh
+
 RUN npm i
 
 ENV PORT=3500
