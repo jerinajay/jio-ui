@@ -5,6 +5,12 @@ import 'dotenv/config';
 import chalk from "chalk";
 import mongoose from 'mongoose';
 import Agenda from "agenda";
+import { default as fsWithCallbacks } from 'fs'
+const fsPromise = fsWithCallbacks.promises
+import util from 'util';
+import { default as child_process } from 'child_process'
+const exec = util.promisify(child_process.exec);
+
 const app = express();
 const { Schema } = mongoose;
 const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://127.0.0.1/ipTV';
@@ -17,7 +23,6 @@ const agenda = new Agenda({ db: { address: MONGO_DB_URL } });
 app.use(express.urlencoded({ extended: true }));
 import fs from "fs";
 app.use(express.json());
-// const PORT = process.env.DHRUV_JTV_PORT || 3500;
 const PORT = process.env.PORT || 3500;
 import path from "path";
 import { fileURLToPath } from "url";
@@ -25,11 +30,6 @@ const __filename = fileURLToPath(import.meta.url);
 
 const __dirname = path.dirname(__filename);
 
-// import { handler } from "file://D:/projects/JTVServer github/WEB/build/handler.js";
-
-// let networkInterfaces = os.networkInterfaces();
-// let ip = networkInterfaces["eth0"][0]["address"];
-// fs["writeFileSync"]("./ipData.jiotv", ip);
 
 if (!fs.existsSync("channel.db")) {
   fs["writeFileSync"]("./channel.db", '{"channel": {}}');
@@ -39,20 +39,11 @@ if (!fs.existsSync("channel-catchup.db")) {
   fs["writeFileSync"]("./channel-catchup.db", '{"channel": {}}');
 }
 
-// app.get("/login.html", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "login.html"));
-// });
 
 app.get("/7200300828", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
-// app.get("/admin", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "login.html"));
-// });
-// app.get("/admin.html", (req, res) => {
-//   res.sendFile(path.join(__dirname, "public", "login.html"));
-// });
 
 app.use(cors());
 
@@ -80,7 +71,16 @@ agenda.define("update_ip", async () => {
   fetch("https://ipecho.io/json")
     .then((response) => response.json())
     .then(async (data) => {
-      let save_ip = await new IpLog({ ip: data.ip, created_at: Date.now() }).save();
+      let current_ip = data.ip;
+      let latest_record = await IpLog.findOne().sort({ created_at: -1 }).lean();
+      if (current_ip != latest_record.ip) {
+        let save_ip = await new IpLog({ ip: data.ip, created_at: Date.now() }).save();
+        let m3u = await fsPromise.readFile("index.html", "utf8");
+        m3u = m3u.replaceAll(latest_record.ip, current_ip);
+        await fs.writeFileSync('index.html', m3u, { encoding: 'utf8', flag: 'w' })
+        const { stdout, stderr } = await exec('git add . && git commit -m "auto commit" && git push');
+        console.log(stdout)
+      }
     });
 });
 
