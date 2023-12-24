@@ -88,7 +88,7 @@ agenda.define("update_ip", async () => {
   // IIFE to give access to async/await
   await agenda.start();
 
-  await agenda.every("60 minutes", "update_ip");
+  await agenda.every("5 minutes", "update_ip");
 })();
 
 
