@@ -74,6 +74,7 @@ agenda.define("update_ip", async () => {
       let current_ip = data.ip;
       let latest_record = await IpLog.findOne().sort({ created_at: -1 }).lean();
       if (current_ip != latest_record.ip) {
+        await exec('git pull')
         let save_ip = await new IpLog({ ip: data.ip, created_at: Date.now() }).save();
         let m3u = await fsPromise.readFile("index.html", "utf8");
         m3u = m3u.replaceAll(latest_record.ip, current_ip);
