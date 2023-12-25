@@ -6,3 +6,5 @@ services:
       - 3500:3500
     build: .
     restart: unless-stopped
+    env_file:
+      - .env

@@ -13,6 +13,7 @@ const exec = util.promisify(child_process.exec);
 
 const app = express();
 const { Schema } = mongoose;
+console.log(MONGO_DB_URL)
 const MONGO_DB_URL = process.env.MONGO_DB_URL || 'mongodb://127.0.0.1/ipTV';
 mongoose.connect(MONGO_DB_URL)
   .then(() => console.log('Connected!'));
@@ -79,8 +80,15 @@ agenda.define("update_ip", async () => {
         let m3u = await fsPromise.readFile("index.html", "utf8");
         m3u = m3u.replaceAll(latest_record.ip, current_ip);
         await fs.writeFileSync('index.html', m3u, { encoding: 'utf8', flag: 'w' })
-        const { stdout, stderr } = await exec('git add index.html && git commit -m "auto commit" && git push');
-        console.log(stdout)
+        if (MONGO_DB_URL === 'mongodb://127.0.0.1/ipTV') {
+          const { stdout, stderr } = await exec('git add index.html && git commit -m "auto commit" && git push');
+          console.log(stdout)
+        } else {
+          let git_username = process.env.GIT_USERNAME
+          let git_password = process.env.GIT_PASSWORD
+          const { stdout, stderr } = await exec(`git add index.html && git commit -m "auto commit" && git push https://${git_username}:${git_password}@github.com/jerinajay/jio-ui.git`);
+          console.log(stdout)
+        }
       }
     });
 });
